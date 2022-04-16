@@ -27,12 +27,20 @@
           ♡<%= @book.favorites.count %> いいね<% end %></p></td>
         <% end %>
 
+        <td>コメント数:<%= @book.book_comments.count %></td>
+
             <% if @book.user == current_user %>
               <td><%= link_to 'Edit', edit_book_path(@book), class: "btn btn-sm btn-success edit_book_#{@book.id}" %></td>
               <td><%= link_to 'Destroy', @book, method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger destroy_book_#{@book.id}"%></td>
             <% end %>
         </tr>
       </table>
+
+      <%= form_with model: [@book, @book_comment] do |f| %>
+      <%= f.text_area :comment, style: "width:100%;" %>
+      <%= f.submit "送信" %>
+      <% end %>
+
     </div>
   </div>
 </div>
