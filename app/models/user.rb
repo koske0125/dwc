@@ -6,7 +6,12 @@ class User < ApplicationRecord
 
   has_many :books, dependent: :destroy
   has_many :favorites, dependent: :destroy
+  has_many :relationships, foreign_key: :follower_id
+  has_many :reverse_of_relationships, class_name: "Relationship" ,foreign_key: :followed_id
   has_one_attached :profile_image
+
+  has_many :followers, through: :relationships, source: :followed #Aがフォローしている人を取得
+  has_many :followeds, through: :reverse_of_relationships, source: :follower #Aをフォローしている人を取得
 
 
   validates :name, length: { minimum: 2, maximum: 20 }, uniqueness: true
@@ -22,4 +27,7 @@ class User < ApplicationRecord
      profile_image.variant(resize_to_limit: [width, height]).processed
   end
 
+  def is_followed_by?(user)
+    reverse_of_relationships.find_by(follower_id: user.id).present?
+  end
 end
