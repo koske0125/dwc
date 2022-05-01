@@ -1,8 +1,8 @@
 <% if book.favorited_by?(current_user) %> <!-- #現在のユーザーにいいねされていた場合 -->
-        <td><p><%= link_to book_favorites_path(book), method: :delete do %>
-          ♥<%= book.favorites.count %> いいね<% end %></p></td>
+        <p><%= link_to book_favorites_path(book), method: :delete, remote: true do %>
+          ♥<%= book.favorites.count %> いいね<% end %></p>
 
         <% else %> <!-- #現在のユーザーにいいねされていない場合 -->
-        <td><p><%= link_to book_favorites_path(book), method: :post do %>
-          ♡<%= book.favorites.count %> いいね<% end %></p></td>
+        <p><%= link_to book_favorites_path(book), method: :post, remote: true do %>
+          ♡<%= book.favorites.count %> いいね<% end %></p>
 <% end %>
