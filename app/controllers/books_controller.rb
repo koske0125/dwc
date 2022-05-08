@@ -10,9 +10,11 @@ class BooksController < ApplicationController
   end
 
   def index
-    # @favorite_rank = Book.find(Favorite.group(:book_id).where(created_at: Time.current.all_week).order('count(book_id) desc').pluck(:book_id))
-    @books = Book.all
-    # @books = @favorite_rank
+    # @rank = Book.find(Favorite.group(:book_id).order('count(book_id) desc').pluck(:book_id))
+    to = Time.current.at_end_of_day
+    from = (to - 6.day).at_beginning_of_day
+    @ranks = Book.includes(:favorited_users).sort {|a,b| b.favorited_users.includes(:favorites).where(created_at: from...to).size <=> a.favorited_users.includes(:favorites).where(created_at: from...to).size}
+    @books = @ranks
     @book = Book.new
   end
 
